@@ -1,0 +1,8 @@
+h1 Update User
+form(action="/users/update", method="POST")
+   div
+      input(type="hidden", name="id", value= user.id)
+      label Name
+      input(type="text", name="name", value= user.name)
+   div
+      button(type="submit") Update

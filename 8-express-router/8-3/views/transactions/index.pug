@@ -1,0 +1,11 @@
+h1 Transactions
+
+div
+   a(href="/transactions/create") Create Transaction
+
+ul
+   each transaction in transactions
+      li
+         span= transaction.userId
+         span &nbsp;
+         span= transaction.bookId

@@ -42,6 +42,29 @@ app.post('/book/create', (req, res) => {
    res.redirect("/books");
 })
 
+app.get('/book/:id/update', (req, res) => {
+   let book = db.get('books').find({id: req.params.id}).value();
+   res.render('books/update', {
+      book: book
+   });
+})
+
+app.post('/book/update', (req, res) => {
+   
+   db.get('books')
+      .find({ id: req.body.id })
+      .assign({title: req.body.title})
+      .write();
+   res.redirect("/books");   
+})
+
+app.get('/book/:id/delete', (req, res) => {
+   db.get('books')
+    .remove({id : req.params.id})
+    .write();
+   res.redirect("back");
+})
+
 app.listen(PORT, () => {
   console.log("Your app is listening on port " + PORT);
 });

@@ -1,0 +1,11 @@
+h1 Book Library
+
+a(href="/book/create") Create
+ul
+  each item in books
+    li
+      span= item.title
+      span &nbsp;
+      a(href='/book/' + item.id + '/update') Update
+      span &nbsp;
+      a(href='/book/' + item.id + '/delete') Delete

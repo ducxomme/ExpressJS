@@ -1,0 +1,16 @@
+h1 Todo-list
+
+form(action="/todos/search", method="GET")
+  input(type="text", name="text")
+  button Search
+
+form(action="/todos/create", method="POST")
+  input(type="text", name="text")
+  button Create
+  
+ul
+  each item in todos
+    li
+      span= item.text
+      span &nbsp;
+      a(href='/todos/' + item.id + '/delete') Delete

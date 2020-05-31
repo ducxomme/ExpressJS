@@ -1,0 +1,25 @@
+extends ../layouts/master
+
+block content
+  h1 Users
+
+  a(href="/users/create") Create user
+  table(class="table table-striped")
+    thead
+      tr
+        th(scope="col") #
+        th(scope="col") Name
+        th(scope="col") View
+        th(scope="col") Update
+        th(scope="col") Delete
+    tbody
+      each user, index in users
+        tr
+          th(scope="row")= index
+          td= user.name
+          td
+            a(href='/users/' + user.id) View
+          td
+            a(href='/users/' + user.id + '/update') Update
+          td
+            a(href='/users/' + user.id + '/delete') Delete

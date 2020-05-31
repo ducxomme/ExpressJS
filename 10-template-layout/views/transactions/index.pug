@@ -1,0 +1,23 @@
+extends ../layouts/master
+
+block content
+   h1 Transactions
+
+   div
+      a(href="/transactions/create") Create Transaction
+   table(class="table table-striped")
+      thead
+         tr
+            th(scope="col") #
+            th(scope="col") User ID
+            th(scope="col") Book ID
+            th(scope="col") Complete
+      tbody
+         each transaction, index in transactions
+            tr
+               th(scope="row")= index
+               td= transaction.userId
+               td= transaction.bookId
+               td
+                  if !transaction.isComplete
+                     a(href="/transactions/" + transaction.id + "/complete") Complete it

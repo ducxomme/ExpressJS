@@ -15,7 +15,7 @@ app.set("views", "./views");
 
 
 app.get("/", (req, res) => {
-  res.send('Hello')
+  res.render('index');
 });
 
 

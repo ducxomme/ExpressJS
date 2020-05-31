@@ -2,7 +2,6 @@ const db = require("../db");
 const shortid = require("shortid");
 
 module.exports.index = (req, res) => {
-  let users = db.get("users").value();
   res.render("users/index", {
     users: db.get("users").value(),
   });

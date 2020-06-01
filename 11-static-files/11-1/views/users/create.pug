@@ -1,0 +1,10 @@
+extends ../layouts/master
+
+block content
+   h1 Create User
+   form(action="/users/create", method="post")
+      div(class="form-group")
+         label Name
+         input(type="text", class="form-control", name="name")
+      div(class="d-flex justify-content-center")
+         button(class="btn btn-primary") Create

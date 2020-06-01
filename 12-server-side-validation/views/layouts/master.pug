@@ -1,0 +1,17 @@
+html
+  head
+    link(rel="icon", href="/favicon.png", type="image/png")
+    link(rel="stylesheet", href="custom.css")
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css")
+  body
+    div(class="container")
+      nav.navbar.navbar-expand-lg.navbar-light.bg-light
+        a.navbar-brand(href='/') Library
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNavAltMarkup', aria-controls='navbarNavAltMarkup', aria-expanded='false', aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        #navbarNavAltMarkup.collapse.navbar-collapse
+          .navbar-nav
+            a.nav-item.nav-link(href='/books') BOOK
+            a.nav-item.nav-link(href='/users') USER
+            a.nav-item.nav-link(href='/transactions') TRANSITION
+      block content

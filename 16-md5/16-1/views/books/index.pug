@@ -1,0 +1,22 @@
+extends ../layouts/master
+
+block content
+  h1 Book Library
+
+  a(href="/books/create") Create Book
+  table(class="table table-striped")
+    thead
+      tr
+        th(scope="col") #
+        th(scope="col") Book Name
+        th(scope="col") Update
+        th(scope="col") Delete
+    tbody
+      each item, index in books
+        tr
+          th(scope="row")= index
+          td= item.title
+          td 
+            a(href='/books/' + item.id + '/update') Update
+          td
+            a(href='/books/' + item.id + '/delete') Delete

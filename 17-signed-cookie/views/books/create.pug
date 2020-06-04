@@ -1,0 +1,13 @@
+extends ../layouts/master
+
+block content
+   h1 Create Book
+   form(action="/books/create", method="post")
+      div(class="form-group")
+         label Title
+         input(type="text", class="form-control", name="title")
+      div(class="form-group")
+         label Description
+         input(type="text", class="form-control", name="description")
+      div(class="d-flex justify-content-center")
+         button(class="btn btn-primary") Create

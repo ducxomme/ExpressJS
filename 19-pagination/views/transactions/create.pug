@@ -1,0 +1,21 @@
+extends ../layouts/master
+
+block content
+  h1 Create transaction
+
+  form(action="", method="post")
+    div(class="form-group")
+      label(for="user") User
+      span &nbsp;
+      select(name="userId", class="custom-select")
+        each user in users
+          option(value= user.id)= user.name
+
+    div(class="form-group")
+      label(for="book") Book
+      span &nbsp;
+      select(name="bookId", class="custom-select")
+        each book in books
+          option(value= book.id)= book.title
+    div(class="d-flex justify-content-center")
+      button(class="btn btn-primary") Create

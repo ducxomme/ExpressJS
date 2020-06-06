@@ -1,0 +1,16 @@
+extends ../layouts/master
+
+block content
+   h1 Create User
+   if errors
+      each error in errors
+         .alert.alert-danger= error
+   form(action="/users/create", method="post")
+      div(class="form-group")
+         label(for="name") Name
+         input#name(type="text", class="form-control", name="name", value= values ? values.name : '')
+      div(class="form-group")
+         label(for="phone") Phone
+         input#phone(type="number", class="form-control", name="phone", value= values ? values.phone : '')
+      div(class="d-flex justify-content-center")
+         button(class="btn btn-primary") Create

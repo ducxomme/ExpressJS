@@ -1,0 +1,15 @@
+extends ../layouts/master
+
+block content
+  h1 Users
+
+  a(href="/users") Users list
+  table(class="table table-striped")
+    thead
+      tr
+        th(scope="col") ID
+        th(scope="col") Name
+    tbody
+      tr
+         td= user.id
+         td= user.name

@@ -12,16 +12,17 @@ html
           ul.navbar-nav
             li.nav-item
                a.nav-link(href='/books') BOOK
+            if user && user.isAdmin
+              li.nav-item
+                 a.nav-link(href='/users') USER
+              li.nav-item
+                 a.nav-link(href='/transactions') TRANSITION
             li.nav-item
-               a.nav-link(href='/users') USER
-            li.nav-item
-               a.nav-link(href='/transactions') TRANSITION
-            li.nav-item
-               a.nav-link(href='/logout') LOGOUT
-        if user && user.isAdmin
+              a.nav-link(href='/cart/checkout') CART
+
+        if user
+          a.nav-link(href='/logout') LOGOUT
           a(href='/users/' + user.id + '/update')= user.name
           img.rounded-circle.ml-3(src=user.avatarUrl ? user.avatarUrl: "https://loremflickr.com/32/32", alt="avatar", width="32")
-        else 
-          p= user.name
     .container.pt-5
       block content

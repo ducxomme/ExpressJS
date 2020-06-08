@@ -13,9 +13,10 @@ block content
               h5.card-title= book.title
               p.card-text= book.description
               .d-flex.justify-content-between
-                a.btn.btn-primary(href='/books/' + book.id + '/update') Update
-                a.btn.btn-danger(href='/books/' + book.id + '/delete') Delete
-  .row.d-flex.justify-content-center.mt-5
+                a.btn.btn-primary(href='/cart/add/' + book.id) Add to cart
+                //a.btn.btn-primary(href='/books/' + book.id + '/update') Update
+                //a.btn.btn-danger(href='/books/' + book.id + '/delete') Delete
+  .row.d-flex.justifybook.id-content-center.mt-5
     nav(ari-label='Page navigation example')
       ul.pagination
         li.page-item

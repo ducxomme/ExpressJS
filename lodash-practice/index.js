@@ -1,5 +1,13 @@
 const _ = require("lodash");
 
+var sessions = [{
+  cart: {
+    'ecRwpYeQS': 2, 'JHkG8NJdl': 7, '4zFeWA1rj': 1
+  },
+  id: "fXIBFHx20"
+}];
+console.log(_.unset(sessions[0], 'cart'), sessions);
+
 var users = [
   { user: "barney", age: 36 },
   { user: "fred", age: 40 },

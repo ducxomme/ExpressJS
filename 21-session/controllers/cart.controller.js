@@ -17,5 +17,6 @@ module.exports.addToCart = (req, res, next) => {
         .find({ id: sessionId })
         .set('cart.' + bookId, cartCountProduct + 1)
         .write();
+    res.locals.cartCount = 10;
     res.redirect('/books');
 };

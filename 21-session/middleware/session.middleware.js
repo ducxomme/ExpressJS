@@ -7,11 +7,9 @@ module.exports = (req, res, next) => {
         let sessionId = shortid.generate();
         res.cookie('sessionId', sessionId, { signed: true });
 
-        console.log('here', req.signedCookies.sessionId);
         db.get('sessions').push({
             id: sessionId
         }).write();
-    } else {
-        next();
     }
+    next();
 }

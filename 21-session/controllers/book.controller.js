@@ -4,6 +4,7 @@ const cloudinary = require('../utilities/cloudinary');
 const fs = require('fs');
 
 module.exports.index = (req, res) => {
+  console.log('herein bookCon', req.signedCookies.sessionId);
   let perPage = 8;
   let allBooks = db.get('books').value();
   let maxPage = Math.ceil(allBooks.length/perPage);
@@ -28,7 +29,8 @@ module.exports.index = (req, res) => {
       books: books,
       page: page,
       first: drop,
-      maxPage: maxPage
+      maxPage: maxPage,
+      cartCount: res.locals.cartCount
     });
   } else {
     res.send('Books Empty <a href="/book/create">Create book</a>');

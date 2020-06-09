@@ -86,6 +86,24 @@
       "bookId": "hYBiYIYOc",
       "id": "09U3l1oIq",
       "isComplete": true
+    },
+    {
+      "id": "hvTpvBj6F",
+      "userId": "o_DOioOKQ",
+      "bookId": "ecRwpYeQS",
+      "isComplete": false
+    },
+    {
+      "id": "jLVFo0-dq3",
+      "userId": "o_DOioOKQ",
+      "bookId": "JHkG8NJdl",
+      "isComplete": false
+    },
+    {
+      "id": "Pa3UYXxVor",
+      "userId": "o_DOioOKQ",
+      "bookId": "PaWQqdImr",
+      "isComplete": false
     }
   ],
   "sessions": [
@@ -97,12 +115,7 @@
       }
     },
     {
-      "id": "kqog2PXDA",
-      "cart": {
-        "ecRwpYeQS": 3,
-        "JHkG8NJdl": 1,
-        "PaWQqdImr": 1
-      }
+      "id": "kqog2PXDA"
     }
   ]
 }

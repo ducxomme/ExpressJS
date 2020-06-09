@@ -1,4 +1,5 @@
 const db = require('../db');
+const shortid = require("shortid");
 
 module.exports.addToCart = (req, res, next) => {
     let bookId = req.params.bookId;
@@ -23,7 +24,6 @@ module.exports.addToCart = (req, res, next) => {
 
 module.exports.checkout = (req, res, next) => {
     let cartCount = res.locals.cartCount;
-    let userId = req.signedCookies.userId;
     let bookIdList = db.get('sessions').find({id: req.signedCookies.sessionId}).value().cart;
     let bookNameList = [];
     for (let item in bookIdList) {
@@ -36,8 +36,25 @@ module.exports.checkout = (req, res, next) => {
     }
 
     res.render('cart/checkout', {
-        userId: userId,
         cartCount: cartCount,
         bookNameList: bookNameList
     })
+}
+
+module.exports.postCheckout = (req, res, next) => {
+
+    let userId = req.signedCookies.userId;
+    let bookIdList = db.get('sessions').find({id: req.signedCookies.sessionId}).value().cart;
+    for (let bookId in bookIdList) {
+        let transactionId = shortid.generate();
+        db.get('transactions').push({
+            id: transactionId,
+            userId: userId,
+            bookId: bookId,
+            isComplete: false
+        }).write();
+    }
+    res.locals.cartCount = 0;
+    db.get('sessions').find({id: req.signedCookies.sessionId}).unset('cart').write();
+    res.redirect('/books');
 }

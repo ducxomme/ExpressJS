@@ -20,3 +20,24 @@ module.exports.addToCart = (req, res, next) => {
     res.locals.cartCount = 10;
     res.redirect('/books');
 };
+
+module.exports.checkout = (req, res, next) => {
+    let cartCount = res.locals.cartCount;
+    let userId = req.signedCookies.userId;
+    let bookIdList = db.get('sessions').find({id: req.signedCookies.sessionId}).value().cart;
+    let bookNameList = [];
+    for (let item in bookIdList) {
+        let book = db.get('books').find({id: item}).value();
+        bookNameList.push({
+            title: book.title,
+            imageUrl: book.imageUrl,
+            quality: bookIdList[item]
+        })
+    }
+
+    res.render('cart/checkout', {
+        userId: userId,
+        cartCount: cartCount,
+        bookNameList: bookNameList
+    })
+}

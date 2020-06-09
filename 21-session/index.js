@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 // app.use(sessionMiddleware);
 
-app.get("/", authMiddleware.auth, (req, res) => {
+app.get("/", cartMiddleware.cartCount, authMiddleware.auth, (req, res) => {
   res.render("index");
 });
 
@@ -33,7 +33,7 @@ app.use("/books", sessionMiddleware, cartMiddleware.cartCount, bookRoute);
 app.use("/users", authMiddleware.auth,userRoute);
 app.use("/transactions", authMiddleware.auth, transactionRoute);
 app.use("/auth", authRoute);
-app.use("/cart", cartRoute);
+app.use("/cart", cartMiddleware.cartCount, cartRoute);
 app.use("/logout", (req, res) => {
    res.clearCookie("userId");
    res.redirect('/auth/login');

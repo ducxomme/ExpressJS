@@ -1,0 +1,23 @@
+extends ../layouts/master
+block content
+    h2 Checkout Cart
+    if (cartCount > 0)
+        form(method="POST")
+            table(class="table table-striped")
+                thead
+                    tr
+                        th(scope="col") #
+                        th(scope="col") Cover Image
+                        th(scope="col") Book title
+                        th(scope="col") Quality
+                tbody
+                    each book, index in bookNameList
+                        tr
+                            th(scope="row")= index
+                            td
+                                img.rounded-circle(src=book.imageUrl ? book.imageUrl : "https://loremflickr.com/64/64", width="64")
+                            td= book.title
+                            td= book.quality
+            button(class="btn btn-primary") Confirm
+    else
+        h2 Have not book yet

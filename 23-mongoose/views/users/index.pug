@@ -1,0 +1,63 @@
+extends ../layouts/master
+
+block content
+  .row.d-flex.align-center.justify-content-between.mb-2.mt-2
+   h2 Users
+
+   a.btn.btn-primary.btn-lg(href="/users/create", role="button") Create User
+  table(class="table table-striped")
+    thead
+      tr
+        th(scope="col") #
+        th(scope="col") Avatar
+        th(scope="col") Name
+        th(scope="col") Email
+        th(scope="col") View
+        th(scope="col") Update
+        th(scope="col") Delete
+    tbody
+      each user in users
+        tr
+          th(scope="row")= first++
+          td
+            img.rounded-circle(src=user.avatarUrl ? user.avatarUrl : "https://loremflickr.com/32/32", alt="avatar", width="32")
+          td= user.name
+          td= user.email
+          td
+            a(href='/users/' + user.id) View
+          td
+            a(href='/users/' + user.id + '/update') Update
+          td
+            a(href='/users/' + user.id + '/delete') Delete
+  .row.d-flex.justify-content-center.mt-5
+    nav(ari-label='Page navigation example')
+      ul.pagination
+        li.page-item
+          a.page-link(href='/users?page=' + (page - 1) aria-label='Previous')
+            span(aria-hidden='true') &laquo;
+            span.sr-only Previous
+        if (page === 1)
+          li.page-item.active
+            a.page-link(href='#')= page
+          li.page-item
+            a.page-link(href='/users?page=' + (page + 1))= page + 1
+          li.page-item
+            a.page-link(href='/users?page=' + (page + 2))= page + 2
+        else if (page === maxPage)
+          li.page-item
+            a.page-link(href='/users?page=' + (maxPage - 2))= maxPage - 2
+          li.page-item
+            a.page-link(href='/users?page=' + (maxPage - 1))= maxPage - 1
+          li.page-item.active
+            a.page-link(href='#')= maxPage
+        else
+          li.page-item
+            a.page-link(href='/users?page=' + (page - 1))= page - 1
+          li.page-item.active
+            a.page-link(href='#')= page
+          li.page-item
+            a.page-link(href='/users?page=' + (page + 1))= page + 1
+        li.page-item
+          a.page-link(href='/users?page=' + (page + 1) aria-label='Next')
+            span(aria-hidden='true') &raquo;
+            span.sr-only Next

@@ -1,0 +1,73 @@
+extends ../layouts/master
+
+block content
+  h1 Book Library
+
+  a(href="/books/create") Create Book
+  .row
+    each book, index in books
+        .col-sm-6.col-md-3.col-lg-3
+          .card.mb-3
+            img.card-img-top(src= book.imageUrl ? book.imageUrl : 'https://loremflickr.com/64/64')
+            .card-body
+              h5.card-title= book.title
+              p.card-text= book.description
+              .d-flex.justify-content-between
+                a.btn.btn-primary(href='/cart/add/' + book.id) Add to cart
+                //a.btn.btn-primary(href='/books/' + book.id + '/update') Update
+                //a.btn.btn-danger(href='/books/' + book.id + '/delete') Delete
+  .row.d-flex.justifybook.id-content-center.mt-5
+    nav(ari-label='Page navigation example')
+      ul.pagination
+        li.page-item
+          a.page-link(href='/books?page=' + (page - 1) aria-label='Previous')
+            span(aria-hidden='true') &laquo;
+            span.sr-only Previous
+        if (page === 1)
+          li.page-item.active
+            a.page-link(href='#')= page
+          li.page-item
+            a.page-link(href='/books?page=' + (page + 1))= page + 1
+          li.page-item
+            a.page-link(href='/books?page=' + (page + 2)) ...
+        else if (page === maxPage)
+          li.page-item
+            a.page-link(href='/books?page=' + (maxPage - 2)) ...
+          li.page-item
+            a.page-link(href='/books?page=' + (maxPage - 1))= maxPage - 1
+          li.page-item.active
+            a.page-link(href='#')= maxPage
+        else
+          li.page-item
+            a.page-link(href='/books?page=' + (page - 1))= page - 1
+          li.page-item.active
+            a.page-link(href='#')= page
+          li.page-item
+            a.page-link(href='/books?page=' + (page + 1))= page + 1
+        li.page-item
+          a.page-link(href='/books?page=' + (page + 1) aria-label='Next')
+            span(aria-hidden='true') &raquo;
+            span.sr-only Next
+    //- else
+    //-     .card.col-6.col-md-3
+    //-         img.card-img-top(src= item.image)
+    //-         .card-body
+    //-           h5.card-title= item.title
+    //-           p.card-text= item.description
+    //-           a.btn.btn-primary(href='#') Create
+  //- table(class="table table-striped")
+  //-   thead 
+  //-     tr
+  //-       th(scope="col") #
+  //-       th(scope="col") Book Name
+  //-       th(scope="col") Update
+  //-       th(scope="col") Delete
+  //-   tbody
+
+        tr
+          th(scope="row")= index
+          td= item.title
+          td 
+            a(href='/books/' + item.id + '/update') Update
+          td
+            a(href='/books/' + item.id + '/delete') Delete

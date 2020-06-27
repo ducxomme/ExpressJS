@@ -46,7 +46,7 @@
       "avatarUrl": "http://res.cloudinary.com/ducxomme/image/upload/v1591497017/iaslgxypvnxogkjvt8c6.png"
     },
     {
-      "isAdmin": false,
+      "isAdmin": true,
       "name": "デゥック",
       "id": "64Lv_ihuc",
       "email": "n14dccn212@gmail.com",
@@ -66,6 +66,12 @@
       "email": "michael@dion.ne.jp",
       "id": "Y8R7EiG76",
       "avatar": "uploads/50ef06ef9f981fa2afbe6c1ab0bbc14c"
+    },
+    {
+      "name": "Nguyen Huu Duc",
+      "email": "nguyenhuu.duc@cydas.com",
+      "id": "CcCkBWiKe",
+      "avatar": "uploads/3ee6fdd2b751cad0d21fca1bc78b592a"
     }
   ],
   "transactions": [
@@ -116,6 +122,9 @@
     },
     {
       "id": "kqog2PXDA"
+    },
+    {
+      "id": "XXmFhIQVq"
     }
   ]
 }

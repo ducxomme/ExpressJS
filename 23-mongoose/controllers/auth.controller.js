@@ -43,7 +43,7 @@ module.exports.postLogin = (req, res) => {
             return;
           }
         } else {
-          res.cookie("userId", user.id, { signed: true });
+          res.cookie("userId", user._id, { signed: true });
           res.redirect("/");
         }
       });

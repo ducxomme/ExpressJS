@@ -1,8 +1,12 @@
 const db = require("../db");
+const mongoose = require("mongoose");
 const shortid = require("shortid");
+const bcrypt = require('bcrypt');
 const fs = require('fs');
 const cloudinary = require('../utilities/cloudinary');
 const User = require('../models/user');
+
+const saltRounds = 10;
 
 module.exports.index = (req, res) => {
   let perPage = 10;
@@ -38,26 +42,50 @@ module.exports.postCreate = (req, res) => {
   req.body.id = shortid.generate();
   req.body.avatar = req.file.path.split('/').slice(1).join('/');
 
-  db.get("users").push(req.body).write();
-  res.redirect("/users");
+  bcrypt.hash(req.body.password, saltRounds, (err, hashPass) => {
+    const user = new User({
+      _id: new mongoose.Types.ObjectId(),
+      isAdmin: false,
+      name: req.body.name,
+      email: req.body.email,
+      password: hashPass,
+      wrongLoginCount: 0,
+      avatarUrl: ''
+    });
+    user.save()
+    .then(result => {
+      console.log('Save user', result);
+      res.redirect("/users");
+    })
+  })
+  .catch(err => {
+    console.log('error in postCreate user, ', err);
+  })
 };
 
 module.exports.get = (req, res) => {
-  let user = db.get("users").find({ id: req.params.id }).value();
-  if (user) {
+  User.findOne({
+    _id: req.params.id
+  })
+  .then(user => {
     res.render("users/view", {
       user: user,
     });
-  }
+  })
 };
 
 module.exports.updateAvatar = (req, res) => {
-  let user = db.get('users').find({id: req.signedCookies.userId}).value();
-  if(user) {
+  User.findOne({
+    _id: req.signedCookies.userId
+  })
+  .then(user => {
     res.render("users/avatar", {
       user: user
     })
-  }
+  })
+  .catch(e => {
+    console.log(e);
+  })
 }
 
 module.exports.postUpdateAvatar = (req, res) => {
@@ -67,14 +95,22 @@ module.exports.postUpdateAvatar = (req, res) => {
   cloudinary
     .upload(img)
     .then(url => {
-      db.get('users').find({id: req.body.id}).assign({avatarUrl: url}).write();
-      fs.unlink(req.file.path, (err) => {
-        if (err) {
-          console.log('err fs: ', err);
+      User.updateOne({
+        _id: req.body.id
+      }, {
+        $set: {
+          'avatarUrl': url 
         }
-        console.log('file was deleted');
-      });
-      res.redirect('/');
+      })
+      .then(result => {
+        fs.unlink(req.file.path, (err) => {
+          if (err) {
+            console.log('err fs: ', err);
+          }
+          console.log('file was deleted');
+        });
+        res.redirect('/');
+      })
     })
     .catch(err => {
       console.log('err', err);
@@ -83,18 +119,38 @@ module.exports.postUpdateAvatar = (req, res) => {
 
 
 module.exports.update = (req, res) => {
-  res.render("users/update", {
-    user: db.get("users").find({ id: req.params.id }).value(),
-  });
+  User.findOne({
+    _id: req.params.id
+  })
+  .then(user => {
+    res.render("users/update", {
+      user: user
+    })
+  })
+  .catch(e => {
+    console.log(e);
+  })
 };
 
 module.exports.postUpdate = (req, res) => {
-  console.log(res.locals);
-  db.get("users")
-    .find({ id: req.body.id })
-    .assign({ name: req.body.name })
-    .write();
-  res.redirect("/users");
+  User.updateOne({
+    _id: req.body.id
+  }, {
+    $set: {
+      'name': req.body.name
+    }
+  })
+  .then(user => {
+    User.find()
+    .then(users => {
+      res.render('users', {
+        users: users
+      })
+    })
+  })
+  .catch(e => {
+    console.log(e);
+  })
 };
 
 module.exports.delete = (req, res) => {

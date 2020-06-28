@@ -1,16 +1,19 @@
 const db = require('../db');
+const User = require('../models/user');
 
 module.exports.auth = (req, res, next) => {
    if (!req.signedCookies.userId) {
       res.redirect('/auth/login');
       return;
    }
-   let user = db.get('users').find({id: req.signedCookies.userId}).value();
-   if (!user) {
-      res.redirect('/auth/login');
-      return;
-   }
-
-   res.locals.user = user;
-   next();
+  User.findOne({
+    _id: req.signedCookies.userId
+  }).then(user => {
+    res.locals.user = user;
+    next();
+  })
+  .catch(e => {
+    res.redirect('/auth/login');
+    return;
+  })
 };

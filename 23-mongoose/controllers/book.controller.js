@@ -82,7 +82,7 @@ module.exports.postCreate = (req, res) => {
 
 module.exports.update = (req, res) => {
   Book.findOne({
-    id: req.params.id
+    _id: req.params.id
   }).then(book => {
     res.render("books/update", {
       book: book,
@@ -90,7 +90,6 @@ module.exports.update = (req, res) => {
   }).catch(err => {
     res.render("auth/error")
   })
-  // let book = db.get("books").find({ id: req.params.id }).value();
 };
 
 module.exports.postUpdate = (req, res) => {
@@ -98,11 +97,23 @@ module.exports.postUpdate = (req, res) => {
     .find({ _id: req.body.id })
     .assign({ title: req.body.title })
     .write();
-  res.redirect("/books");
+  Book.updateOne({
+    _id: req.body.id
+  }, {
+    $set: {
+      'title': req.body.title
+    }
+  })
+  .then(result => {
+    res.redirect("/books");
+  })
+  .catch(err => { 
+    console.log(err)
+  })
 };
 
 module.exports.delete = (req, res) => {
-  db.get("books").remove({ id: req.params.id }).write();
+  // db.get("books").remove({ id: req.params.id }).write();
   Book.remove({ _id: req.params.id })
   .then(result => {
     res.redirect("/books");

@@ -1,44 +1,66 @@
-const db = require("../db");
-const shortid = require("shortid");
+const mongoose = require('mongoose');
+const User = require("../models/user");
+const Transaction = require("../models/transaction");
+const Book = require('../models/book');
 
-module.exports.index =  (req, res) => {
-  let user = db.get('users').find({id: req.signedCookies.userId}).value();
-  let transactions = db.get('transactions').find({userId: req.signedCookies.userId}).value();
-  if (user.isAdmin) {
-      transactions = db.get('transactions').value();
-  }
-  if (!transactions) {
-   res.render("transactions/index", {
-      transactions: transactions,
-      haveItem: false
-   });
-   return;
-  } else {
-   res.render("transactions/index", {
-      transactions: transactions,
-      haveItem: true
-   });
-  }
+module.exports.index = (req, res) => {
+  Transaction.find({
+    userId: req.signedCookies.userId,
+  })
+    .then((transactions) => {
+      console.log("transactions", transactions);
+      res.render("transactions/index", {
+        transactions: transactions
+      });
+    })
+    .catch((err) => {
+      console.log("error in transaction index: ", err);
+    });
 };
 
 module.exports.create = (req, res) => {
-  let users = db.get('users').value();
-  let books = db.get('books').value();
-  res.render("transactions/create", {
-    users: users,
-    books: books
-  });
+  User.find()
+  .then(users => {
+    Book.find()
+    .then(books => {
+      res.render("transactions/create", {
+        users: users,
+        books: books,
+      });
+    })
+  })
 };
 
 module.exports.postCreate = (req, res) => {
-  req.body.id = shortid.generate();
-  db.get("transactions").push(req.body).write();
-  res.redirect("/transactions");
+  const transaction = new Transaction({
+    _id: mongoose.Types.ObjectId(),
+    userId: req.body.userId,
+    bookId: req.body.bookId,
+    isComplete: false
+  })
+  transaction.save()
+  .then(result =>{
+    console.log('saved transaction ', result);
+    res.redirect("/transactions");
+  })
+  .catch(err => {
+    console.log('error in postCreate transaction: ', err);
+  });
 };
 
 module.exports.complete = (req, res) => {
-  db.get('transactions').find({id: req.params.id})
-    .assign({ isComplete: true})
-    .write();
-  res.redirect("/transactions");
-}
+  Transaction.updateOne({
+    _id: req.params.id
+  }, {
+    $set: {
+      isComplete: true
+    }
+  })
+  .then(result =>{
+    console.log('updated transaction ', result);
+    res.redirect("/transactions");
+  })
+  .catch(err => {
+    console.log('error in updated transaction: ', err);
+  });
+};

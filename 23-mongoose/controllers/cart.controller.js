@@ -1,60 +1,132 @@
-const db = require('../db');
-const shortid = require("shortid");
+const mongoose = require("mongoose");
+const Session = require("../models/session");
+const Book = require("../models/book");
+const Transaction = require("../models/transaction");
 
 module.exports.addToCart = (req, res, next) => {
-    let bookId = req.params.bookId;
-    let sessionId = req.signedCookies.sessionId;
+  let bookId = req.params.bookId;
+  let sessionId = req.signedCookies.sessionId;
 
-    if (!sessionId) {
-        res.redirect('/books')
-        return;
-    }
+  if (!sessionId) {
+    res.redirect("/books");
+    return;
+  }
 
-    let cartCountProduct = db.get('sessions')
-        .find({ id: sessionId })
-        .get('cart.' + bookId, 0)
-        .value();
-    db.get('sessions')
-        .find({ id: sessionId })
-        .set('cart.' + bookId, cartCountProduct + 1)
-        .write();
-    res.locals.cartCount = 10;
-    res.redirect('/books');
+  Session.findOne({
+    _id: sessionId,
+  })
+    .then((sess) => {
+      if (!sess._doc.cart.bookId) {
+        // Create default cart
+        Session.updateOne(
+          {
+            _id: sess._doc._id,
+          },
+          {
+            $set: {
+              cart: {
+                [bookId]: 1,
+              },
+            },
+          }
+        ).then((result) => {
+          console.log(result);
+        });
+      } else {
+        // Add cart count
+        Session.updateOne(
+          {
+            _id: sess._doc._id,
+          },
+          {
+            $set: {
+              cart: {
+                [bookId]: sess._doc.cart.bookId + 1,
+              },
+            },
+          }
+        );
+      }
+      res.redirect("/books");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 module.exports.checkout = (req, res, next) => {
-    let cartCount = res.locals.cartCount;
-    let bookIdList = db.get('sessions').find({id: req.signedCookies.sessionId}).value().cart;
+  let cartCount = res.locals.cartCount;
+
+  Session.findOne({
+    _id: req.signedCookies.sessionId,
+  }).then((session) => {
+    let bookIdList = session.cart;
+
     let bookNameList = [];
     for (let item in bookIdList) {
-        let book = db.get('books').find({id: item}).value();
-        bookNameList.push({
+
+      Book.findOne({
+        _id: item,
+      })
+        .then((book) => {
+          console.log("book find success");
+          bookNameList.push({
             title: book.title,
             imageUrl: book.imageUrl,
-            quality: bookIdList[item]
-        })
-    }
+            quality: bookIdList[item],
+          });
 
-    res.render('cart/checkout', {
-        cartCount: cartCount,
-        bookNameList: bookNameList
-    })
-}
+          res.render("cart/checkout", {
+            cartCount: cartCount,
+            bookNameList: bookNameList,
+          });
+        })
+        .catch((err) => {
+          console.log("error in checkout, ", err);
+        });
+    }
+  });
+};
 
 module.exports.postCheckout = (req, res, next) => {
+  let userId = req.signedCookies.userId;
 
-    let userId = req.signedCookies.userId;
-    let bookIdList = db.get('sessions').find({id: req.signedCookies.sessionId}).value().cart;
-    for (let bookId in bookIdList) {
-        let transactionId = shortid.generate();
-        db.get('transactions').push({
-            id: transactionId,
-            userId: userId,
-            bookId: bookId,
-            isComplete: false
-        }).write();
-    }
-    res.locals.cartCount = 0;
-    db.get('sessions').find({id: req.signedCookies.sessionId}).unset('cart').write();
-    res.redirect('/books');
-}
+  Session.findOne({
+    _id: req.signedCookies.sessionId,
+  })
+    .then((session) => {
+      let bookIdList = session.cart;
+
+      for (let bookId in bookIdList) {
+        let transaction = new Transaction({
+          _id: mongoose.Types.ObjectId(),
+          userId: userId,
+          bookId: bookId,
+          isComplete: false,
+        });
+
+        transaction.save().then((result) => {
+          console.log("saved transaction ", result);
+        });
+      }
+
+      res.locals.cartCount = 0;
+
+      Session.updateOne(
+        {
+          _id: req.signedCookies.sessionId,
+        },
+        {
+          $set: {
+            cart: {},
+          },
+        }
+      ).then((result) => {
+        console.log("unset session cart ok");
+      });
+      res.redirect("/books");
+    })
+    .catch((err) => {
+      console.log("error in postCheckout", err);
+    });
+};

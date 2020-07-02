@@ -5,7 +5,7 @@ block content
 
    div
       a(href="/transactions/create") Create Transaction
-   if haveItem
+   if (transactions.length > 0)
       table(class="table table-striped")
          thead
             tr
@@ -22,6 +22,6 @@ block content
                      td= transaction.bookId
                      td
                         if !transaction.isComplete
-                           a(href="/transactions/" + transaction.id + "/complete") Complete it
+                           a(href="/transactions/" + transaction._id + "/complete") Complete it
    else
       h2 No transaction

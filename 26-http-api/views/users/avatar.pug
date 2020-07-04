@@ -1,0 +1,12 @@
+extends ../layouts/master
+
+block content
+  h1 Update Avatar
+  form(method="POST", enctype="multipart/form-data")
+    .form-group
+      input(type="hidden", name="id", value= user.id)
+      img.rounded-circle(src=user.avatarUrl ? user.avatarUrl : "https://loremflickr.com/64/64", alt="avatar")
+    .form-group
+      label(for="avatarUrl") Upload
+      input.form-control-file#avatarUrl(type="file", name="avatarUrl")
+    button(class="btn btn-primary") Update

@@ -1,0 +1,29 @@
+html
+  head
+    link(rel="icon", href="/favicon.png", type="image/png")
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css")
+  body
+    div.container.align-items-center
+      nav.navbar.navbar-expand-lg.navbar-light.bg-light
+        a.navbar-brand(href='/') Library
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNavAltMarkup', aria-controls='navbarNavAltMarkup', aria-expanded='false', aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        #navbarNavAltMarkup.collapse.navbar-collapse
+          ul.navbar-nav
+            li.nav-item
+               a.nav-link(href='/books') BOOK
+            if user && user.isAdmin
+              li.nav-item
+                 a.nav-link(href='/users') USER
+              li.nav-item
+                 a.nav-link(href='/transactions') TRANSITION
+            li.nav-item
+              a.nav-link(href='/cart/checkout') CART
+                span.badge.badge-info.ml-2= cartCount
+
+        if user
+          a.nav-link(href='/logout') LOGOUT
+          a(href='/users/' + user.id + '/update')= user.name
+          img.rounded-circle.ml-3(src=user.avatarUrl ? user.avatarUrl: "https://loremflickr.com/32/32", alt="avatar", width="32")
+    .container.pt-5
+      block content

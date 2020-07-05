@@ -1,0 +1,50 @@
+openapi: "3.0.0"
+info:
+  title: Book Library API Documentation
+  description: Documentation for API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api
+    description: API for library
+
+paths:
+  /auth/login:
+    post:
+      summary: Login
+      description: After login can receive a token to access to other resources
+      requestBody:
+        description: User's email and password
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  message:
+                    type: string
+                    example: Auth successful
+        '403':
+          description: Login wrong to many times
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Too much wrong! User have been blocked!

@@ -1,0 +1,10 @@
+version: '3.5'
+services:
+  openapi:
+    image: swaggerapi/swagger-editor
+    ports:
+      - "8090:8080"
+    environment:
+      URL: /api/openapi.yml
+    volumes:
+      - "./openapi.yml:/usr/share/nginx/html/api"

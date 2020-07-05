@@ -11,12 +11,25 @@ mongoose.connect(
     useUnifiedTopology: true,
   });
 
+  /**
+   * WEB ROUTES
+   */
 const bookRoute = require("./routes/book.route");
 const userRoute = require("./routes/user.route");
 const transactionRoute = require("./routes/transaction.route");
 const authRoute = require('./routes/auth.route');
 const cartRoute = require('./routes/cart.route');
 
+/**
+ * API ROUTE
+ */
+const authApiRoute = require('./api/routes/auth.route');
+const bookApiRoute = require('./api/routes/book.route');
+const transactionApiRoute = require('./api/routes/transaction.route');
+
+/**
+ * MIDDLEWARE WEB
+ */
 const authMiddleware = require('./middleware/auth.middleware')
 const sessionMiddleware = require('./middleware/session.middleware');
 const cartMiddleware = require('./middleware/cart.middleware');
@@ -32,6 +45,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 // app.use(sessionMiddleware);
 
+/**
+ * MIDDLEWARE API
+ */
+const authApiMiddleware = require('./api/middleware/auth.middleware');
+
+
+/** 
+ * WEB ROUTE DETAILS
+ */
 app.get("/", cartMiddleware.cartCount, authMiddleware.auth, (req, res) => {
   res.render("index");
 });
@@ -45,6 +67,13 @@ app.use("/logout", (req, res) => {
    res.clearCookie("userId");
    res.redirect('/auth/login');
 })
+
+/**
+ * API ROUTE DETAILS
+ */
+app.use('/api/auth', authApiRoute);
+app.use('/api/books', bookApiRoute);
+app.use('/api/transactions', authApiMiddleware, transactionApiRoute);
 
 app.listen(PORT, () => {
   console.log("Your app is listening on port " + PORT);

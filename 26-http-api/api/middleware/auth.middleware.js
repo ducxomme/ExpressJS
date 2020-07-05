@@ -1,6 +1,5 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const User = require("../../models/user");
 
 module.exports = (req, res, next) => {
   try {
@@ -13,19 +12,4 @@ module.exports = (req, res, next) => {
       error: 'Auth failed'
     })
   }
-  // if (!req.signedCookies.userId) {
-  //   res.redirect("/auth/login");
-  //   return;
-  // }
-  // User.findOne({
-  //   _id: req.signedCookies.userId,
-  // })
-  //   .then((user) => {
-  //     res.locals.user = user;
-  //     next();
-  //   })
-  //   .catch((e) => {
-  //     res.redirect("/auth/login");
-  //     return;
-  //   });
 };

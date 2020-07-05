@@ -10,6 +10,6 @@ const upload = multer( {dest: './public/uploads/'} );
 
 router.get("/", controller.index);
 router.post("/create", upload.single('image'), authApiMiddleware, controller.postCreate);
-router.patch("/:id/update", controller.update)
-router.delete("/:id/delete", controller.delete);
+router.patch("/:id/update", authApiMiddleware, controller.update)
+router.delete("/:id/delete", authApiMiddleware, controller.delete);
 module.exports = router;

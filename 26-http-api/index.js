@@ -26,6 +26,7 @@ const cartRoute = require('./routes/cart.route');
 const authApiRoute = require('./api/routes/auth.route');
 const bookApiRoute = require('./api/routes/book.route');
 const transactionApiRoute = require('./api/routes/transaction.route');
+const cartApiRoute = require('./api/routes/cart.route');
 
 /**
  * MIDDLEWARE WEB
@@ -73,6 +74,7 @@ app.use("/logout", (req, res) => {
  */
 app.use('/api/auth', authApiRoute);
 app.use('/api/books', bookApiRoute);
+app.use('/api/carts', cartApiRoute);
 app.use('/api/transactions', authApiMiddleware, transactionApiRoute);
 
 app.listen(PORT, () => {

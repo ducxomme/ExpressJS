@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require("express");
-const PORT = 3000;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require('mongoose');
@@ -55,6 +54,6 @@ app.use((error, req, res, next) => {
   res.render('auth/error');
 });
 
-app.listen(PORT, () => {
-  console.log("Your app is listening on port " + PORT);
+app.listen(process.env.PORT, () => {
+  console.log("Your app is listening on port " + process.env.PORT);
 });

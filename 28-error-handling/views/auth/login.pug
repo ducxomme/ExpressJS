@@ -1,0 +1,25 @@
+html
+  head
+    link(rel="icon", href="/favicon.png", type="image/png")
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css")
+  body
+    div(class="container")
+      h1 Login
+      if errors
+         each error in errors
+            .alert.alert-danger= error
+      if emailReset
+         div Send reset Password to Email
+            form(action="reset", method="post")
+               input(type="hidden", name="email" value= values.email)
+               button.btn.btn-info Send
+            
+      form(method="post")
+         div(class="form-group")
+            label(for="email") Email
+            input#email(type="email", class="form-control", name="email", value= values ? values.email : '')
+         div(class="form-group")
+            label(for="password") Password
+            input#password(type="password", class="form-control", name="password", value= values ? values.password : '')
+         div(class="d-flex")
+            button(class="btn btn-primary") Login
